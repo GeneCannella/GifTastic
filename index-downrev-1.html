@@ -16,8 +16,23 @@
 
 <body>
     <div class="container">
-
-
+        <h1>Movie Search</h1>
+        <!-- Movies will Get Dumped Dere -->
+        <div id="movies-view"></div>
+        <!-- Rendered Buttons will get Dumped Here  -->
+        <div id="buttons-view"></div>
+        <form id="movie-form">
+            <label for="movie-input">Add a Movie Bro</label>
+            <input type="text" id="movie-input">
+            <br>
+            <!-- Button triggers new movie to be added -->
+            <input id="add-movie" type="submit" value="Add a Movie Bro">
+        </form>
+        <!--End complete movie app, begin dynamic elements-->
+        <button class="button" data-topic="scientist" data-animal="cat">scientist</button>
+        <button class="button" data-animal="dog">woof</button>
+        <button class="button" data-animal="bird">chirp</button>
+        <div id="gifs-appear-here"></div>
         <!-- Input Form for GIPHY topics -->
         <h1>GIPHY Search</h1>
         <!-- GIPHY reults will be placed here -->
@@ -51,7 +66,7 @@
     <script type="text/javascript">
     //
     //
-    var topics = ["Einstein", "Isaac Newton", "Isaac Asimov", "Stephen Hawking"];
+    var topics = ["Einstein", "Isaac Newton", "Isaac Asimov", "Scientists"];
 
 
     // (1.) Here is the event handler that listens for button clicks and hits the GIPHY API for that topic
@@ -102,7 +117,7 @@
                     topicDiv.append(topicImage);
 
                     // Prependng the animalDiv to the HTML page in the "#gifs-appear-here" div
-                    $("#giphy-results").prepend(topicDiv);
+                    $("#gifs-appear-here").prepend(topicDiv);
                 }
             });
     });
@@ -143,7 +158,85 @@
     //
     //
     </script>
+    <!--begin script for movie app -->
+    <script type="text/javascript">
+    // Initial array of movies
+    var movies = ["The Matrix", "The Notebook", "Mr. Nobody", "The Lion King"];
+    // displayMovieInfo function re-renders the HTML to display the appropriate content
+    function displayMovieInfo() {
+        var movie = $(this).attr("data-name");
+        var queryURL = "https://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
+        // Creating an AJAX call for the specific movie button being clicked
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).done(function(response) {
+            // Creating a div to hold the movie
+            var movieDiv = $("<div class='movie'>");
+            // Storing the rating data
+            var rating = response.Rated;
+            // Creating an element to have the rating displayed
+            var pOne = $("<p>").text("Rating: " + rating);
+            // Displaying the rating
+            movieDiv.append(pOne);
+            // Storing the release year
+            var released = response.Released;
+            // Creating an element to hold the release year
+            var pTwo = $("<p>").text("Released: " + released);
+            // Displaying the release year
+            movieDiv.append(pTwo);
+            // Storing the plot
+            var plot = response.Plot;
+            // Creating an element to hold the plot
+            var pThree = $("<p>").text("Plot: " + plot);
+            // Appending the plot
+            movieDiv.append(pThree);
+            // Retrieving the URL for the image
+            var imgURL = response.Poster;
+            // Creating an element to hold the image
+            var image = $("<img>").attr("src", imgURL);
+            // Appending the image
+            movieDiv.append(image);
+            // Putting the entire movie above the previous movies
+            $("#movies-view").prepend(movieDiv);
+        });
+    }
+    // Function for displaying movie data
+    function renderButtons() {
+        // Deleting the movies prior to adding new movies
+        // (this is necessary otherwise you will have repeat buttons)
+        $("#buttons-view").empty();
+        // Looping through the array of movies
+        for (var i = 0; i < movies.length; i++) {
+            // Then dynamicaly generating buttons for each movie in the array
+            // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
+            var a = $("<button>");
+            // Adding a class of movie to our button
+            a.addClass("movie");
+            // Adding a data-attribute
+            a.attr("data-name", movies[i]);
+            // Providing the initial button text
+            a.text(movies[i]);
+            // Adding the button to the buttons-view div
+            $("#buttons-view").append(a);
+        }
+    }
+    // This function handles events where add movie button is clicked
+    $("#add-movie").on("click", function(event) {
+        event.preventDefault();
+        // This line grabs the input from the textbox
+        var movie = $("#movie-input").val().trim();
+        // Adding movie from the textbox to our array
+        movies.push(movie);
+        // Calling renderButtons which handles the processing of our movie array
+        renderButtons();
+    });
+    // Adding a click event listener to all elements with a class of "movie"
 
+    $(document).on("click", ".movie", displayMovieInfo); //no longer need this
+    // Calling the renderButtons function to display the intial buttons
+    renderButtons();
+    </script>
 </body>
 
 </html>
