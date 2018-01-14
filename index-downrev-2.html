@@ -12,11 +12,6 @@
         margin: 10px;
     }
     </style>
-    <style type="text/css">
-    .topicDiv {
-        float: left;
-    }
-    </style>
 </head>
 
 <body>
@@ -25,7 +20,8 @@
 
         <!-- Input Form for GIPHY topics -->
         <h1>GIPHY Search</h1>
-
+        <!-- GIPHY reults will be placed here -->
+        <div id="giphy-results"></div>
         <!-- Rendered Buttons will be placed here  -->
         <div id="rendered-buttons">Rendered buttons go here</div>
         <form id="topic-entry-form">
@@ -35,10 +31,6 @@
             <!-- Button triggers new movie to be added -->
             <input id="add-topic" type="submit" value="Submit">
         </form>
-
-        <!-- GIPHY reults will be placed here -->
-        <div id="giphy-results"></div>
-
     </div>
     <!--Link to jQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -91,8 +83,6 @@
                 // storing the data from the AJAX request in the results variable
                 var results = response.data;
 
-                $("#giphy-results").empty();
-
                 // Looping through each result item
                 for (var i = 0; i < results.length; i++) {
 
@@ -107,13 +97,12 @@
                     // Setting the src attribute of the image to a property pulled off the result item
                     topicImage.attr("src", results[i].images.fixed_height.url);
 
-                    // Appending the paragraph and image tag to the topicDiv
+                    // Appending the paragraph and image tag to the animalDiv
                     topicDiv.append(p);
                     topicDiv.append(topicImage);
-                    topicDiv.addClass("topicDiv");
 
-                    // Appendng the topicDiv to the HTML page in the "#giphy-results" div
-                    $("#giphy-results").append(topicDiv);
+                    // Prependng the animalDiv to the HTML page in the "#gifs-appear-here" div
+                    $("#giphy-results").prepend(topicDiv);
                 }
             });
     });
