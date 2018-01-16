@@ -21,11 +21,8 @@
 
 <body>
     <div class="container">
-
-
         <!-- Input Form for GIPHY topics -->
         <h1>GIPHY Search</h1>
-
         <!-- Rendered Buttons will be placed here  -->
         <div id="rendered-buttons">Rendered buttons go here</div>
         <form id="topic-entry-form">
@@ -35,10 +32,8 @@
             <!-- Button triggers new movie to be added -->
             <input id="add-topic" type="submit" value="Submit">
         </form>
-
         <!-- GIPHY reults will be placed here -->
         <div id="giphy-results"></div>
-
     </div>
     <!--Link to jQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -51,6 +46,7 @@
     2.1. grab the form input
     2.2. push the result onto the topics array
     2.3. re-render all the buttons based on the new array
+    3. We need a click handler that listens for clicks on the gifs and toggles the state of still/animated
 
 
     -->
@@ -66,11 +62,6 @@
     // Adding a click event listener to all elements with a class of "button"
     $(document).on("click", ".button", function() {
 
-
-        // Adding click event listen listener to all buttons - deprecated
-        //$("button").on("click", function() {
-
-
         // Grabbing and storing the data-topic property value from the button
         var topic = $(this).attr("data-topic");
 
@@ -85,9 +76,10 @@
             })
             // After data comes back from the request
             .done(function(response) {
-                console.log(queryURL);
 
-                console.log(response);
+                console.log("queryURL= ", queryURL);
+                console.log("response= ", response);
+
                 // storing the data from the AJAX request in the results variable
                 var results = response.data;
 
@@ -104,21 +96,43 @@
 
                     // Creating and storing an image tag
                     var topicImage = $("<img>");
-                    // Setting the src attribute of the image to a property pulled off the result item
-                    topicImage.attr("src", results[i].images.fixed_height.url);
+
+                    //figure out why I can't get at the native html with any of these construction
+                    //console.log("create img element");
+                    //console.log(topicImage);
+                    //console.log("of [0]", topicImage[0]);
+                    //console.log(topicImage.html());
+
+
+                    // Set the img src attribute the url for the (still) image, retrieved from the results object
+                    topicImage.attr("src", results[i].images.fixed_height_still.url); //uses the still image
+                    //topicImage.attr("src", results[i].images.fixed_height.url); //uses the animated image
+
+                    //now we need to add data-still and data-animate attributes to the img for the still and animated src files
+                    topicImage.attr("data-still", results[i].images.fixed_height_still.url);
+                    topicImage.attr("data-animate", results[i].images.fixed_height.url);
+
+                    //also need to add data-state attribute, initialized to still
+                    topicImage.attr("data-state", "still");
+
+                    //add a class we can use select the images later for a click function
+                    topicImage.addClass("gif");
 
                     // Appending the paragraph and image tag to the topicDiv
                     topicDiv.append(p);
                     topicDiv.append(topicImage);
-                    topicDiv.addClass("topicDiv");
+                    topicDiv.addClass("topicDiv"); //adding this class so we can style the image divs (first pass style is float: left)
 
                     // Appendng the topicDiv to the HTML page in the "#giphy-results" div
                     $("#giphy-results").append(topicDiv);
                 }
             });
+
+        console.log("gif html");
+        console.log($(".gif").html());
     });
 
-    //(2.) Here is the event handler that listens for the submit button used to create a new topic button
+    // (2.) Here is the event handler that listens for the submit button used to create a new topic button
     $("#add-topic").on("click", function(event) {
         event.preventDefault();
         // This line grabs the input from the textbox
@@ -127,6 +141,28 @@
         topics.push(topic);
         // Calling renderButtons which handles the processing of our movie array
         renderTopicButtons();
+        console.log("gif html");
+        console.log($(".gif").html());
+    });
+
+    // (3.) Here is the click handler for animating the gifs 
+//    $(".gif").on("click", function() {
+//    $(".topicDiv").on("click", function() {
+    $(document).on("click", ".gif", function() {
+        console.log("gif has been clicked");
+        // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+        var state = $(this).attr("data-state");
+        console.log("data-state= ", state);
+        // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+        // Then, set the image's data-state to animate
+        // Else set src to the data-still value
+        if (state === "still") {
+            $(this).attr("src", $(this).attr("data-animate"));
+            $(this).attr("data-state", "animate");
+        } else {
+            $(this).attr("src", $(this).attr("data-still"));
+            $(this).attr("data-state", "still");
+        }
     });
 
     function renderTopicButtons() {
@@ -154,7 +190,10 @@
     //
     //
     </script>
-
 </body>
 
 </html>
+<!-- Remaining to do
+    Add still/anaimate functionality
+    move js to separate file
+    add some styling, perhaps bootstrap
