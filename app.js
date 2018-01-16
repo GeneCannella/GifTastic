@@ -122,18 +122,17 @@
     function renderTopicButtons() {
 
         $("#rendered-buttons").empty();
-        // Looping through the array of movies
+        // Loop through the array of topics
         for (var i = 0; i < topics.length; i++) {
-            // Then dynamicaly generating buttons for each movie in the array
-            // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
+            // dynamicaly generate buttons for each topic in the array
             var a = $("<button>");
-            // Adding a class of movie to our button
-            a.addClass("button");
-            // Adding a data-attribute
+            // Add a class of "button" to each button, to select later, both event handler and styling
+            a.addClass("button");  //consider later if I needed this class at all, but could I have selected by the tag
+            // Add a data-attribute to hold the topic text
             a.attr("data-topic", topics[i]);
-            // Providing the initial button text
+            // Put the topic text into the button
             a.text(topics[i]);
-            // Adding the button to the buttons-view div
+            // Add the button to the buttons-view div
             $("#rendered-buttons").append(a);
         }
     }
