@@ -1,12 +1,18 @@
     //
-    //
-    var topics = ["Einstein", "Isaac Newton", "Isaac Asimov", "Stephen Hawking"];
+    //"
+        var topics = ["Albert Einstein", "Isaac Newton", "Isaac Asimov", "Stephen Hawking",
+        "King", "Queen", "Jack",
+        "Shatner", "Nimoy", "Kirk", "Spock", "McCoy", "Scotty", "Checkov", "Sulu", "Uhura",
+        "Lebron", "Michael Jordan", "Roger Federer", "Tom Brady",
+        "Henry Winkler", "George Foreman", "Terry Bradshaw",
+        "Captain America", "Thor", "The Hulk", "The Black Widow", "Iron Man","Hawkeye"
+        ];
 
 
     // (Pseudo code item 1.) Here is the event handler that listens for button clicks and hits the GIPHY API
     // for the topic associated with that button
     // Bind the click handler to the document because not all buttons exist yet
-    $(document).on("click", ".button", function() {
+    $(document).on("click", ".btn", function() {
 
         // (PC 1.1) Get the data-topic property value from the button that was clicked
         var topic = $(this).attr("data-topic");
@@ -127,7 +133,7 @@
             // dynamicaly generate buttons for each topic in the array
             var a = $("<button>");
             // Add a class of "button" to each button, to select later, both event handler and styling
-            a.addClass("button");  //consider later if I needed this class at all, but could I have selected by the tag
+            a.addClass("btn btn-info");  //consider later if I needed this class at all, but could I have selected by the tag
             // Add a data-attribute to hold the topic text
             a.attr("data-topic", topics[i]);
             // Put the topic text into the button
