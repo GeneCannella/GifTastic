@@ -12,7 +12,7 @@
     // (Pseudo code item 1.) Here is the event handler that listens for button clicks and hits the GIPHY API
     // for the topic associated with that button
     // Bind the click handler to the document because not all buttons exist yet
-    $(document).on("click", ".btn", function() {
+    $(document).on("click", ".button", function() {
 
         // (PC 1.1) Get the data-topic property value from the button that was clicked
         var topic = $(this).attr("data-topic");
@@ -132,8 +132,9 @@
         for (var i = 0; i < topics.length; i++) {
             // dynamicaly generate buttons for each topic in the array
             var a = $("<button>");
-            // Add a class of "button" to each button, to select later, both event handler and styling
-            a.addClass("btn btn-info");  //consider later if I needed this class at all, but could I have selected by the tag
+            // Add a class of "button" to each button, to select later, for event handler
+            // Add boostrap btn and btn-info classes for styling
+            a.addClass("button btn btn-info");  //consider later if I needed this class at all, but could I have selected by the tag
             // Add a data-attribute to hold the topic text
             a.attr("data-topic", topics[i]);
             // Put the topic text into the button

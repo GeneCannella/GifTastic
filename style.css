@@ -1,0 +1,15 @@
+/* style.css file for GifTastic project  */
+
+button {
+    margin: 5px;
+}
+
+.topicDiv {
+    display: inline-block;
+    margin-right: 10px;
+    margin-top: 25px;
+}
+
+.form-group {
+    margin-top: 50px;
+}
